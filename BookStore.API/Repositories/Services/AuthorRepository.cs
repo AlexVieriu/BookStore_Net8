@@ -14,8 +14,8 @@ public class AuthorRepository : BaseRepository<Author>, IAuthorRepository
     public async Task<AuthorReadDto> GetAuthorAsync(int id)
     {
         var author = await _context.Authors.Include(q => q.Books)
-                                          .ProjectTo<AuthorReadDto>(_mapper.ConfigurationProvider)
-                                          .FirstOrDefaultAsync(o => o.Id == id);
+                                           .ProjectTo<AuthorReadDto>(_mapper.ConfigurationProvider)
+                                           .FirstOrDefaultAsync(o => o.Id == id);
         return author;
     }
 }

@@ -1,15 +1,15 @@
 ﻿namespace BookStore.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class AuthorController : ControllerBase
+public class NewAuthorController : ControllerBase
 {
-    private readonly IAuthorRepository _authorRepo;
+    private readonly INewAuthorRepository _authorRepo;
     private readonly ILogger<AuthorController> _logger;
     private readonly IMapper _mapper;
 
-    public AuthorController(IAuthorRepository authorRepo,
-                            ILogger<AuthorController> logger,
-                            IMapper mapper)
+    public NewAuthorController(INewAuthorRepository authorRepo,
+                               ILogger<AuthorController> logger,
+                               IMapper mapper)
     {
         _authorRepo = authorRepo;
         _logger = logger;
@@ -17,8 +17,7 @@ public class AuthorController : ControllerBase
     }
 
     // GET: api/Author/?startindex=0&pagesize=15
-    [HttpGet]
-    [Route("/api/AuthorsWithPg")]
+    [HttpGet("AuthorsWithPg")]    
     public async Task<ActionResult<VirtualizeResponse<AuthorReadDto>>> GetAuthorsWithPg([FromQuery] QueryParameters queryParams)
     {
         try
@@ -33,17 +32,12 @@ public class AuthorController : ControllerBase
     }
 
     // GET: api/authors
-    [HttpGet()]
-    [Route("/api/Authors")]
+    [HttpGet("Authors")]    
     public async Task<ActionResult<List<AuthorReadDto>>> GetAuthors()
     {
         try
         {
-            var authors = await _authorRepo.GetAllAsync();
-            var authorsDto = _mapper.Map<List<AuthorReadDto>>(authors);
-
-            return authorsDto;
-
+            return await _authorRepo.GetAllAsync<AuthorReadDto>();           
         }
         catch (Exception ex)
         {
@@ -62,7 +56,7 @@ public class AuthorController : ControllerBase
             if (id == 0)
                 return BadRequest();
 
-            var author = await _authorRepo.GetAuthorAsync(id);
+            var author = await _authorRepo.GetAsync<AuthorReadDto>(id);
             if (author == null)
                 return NotFound();
 
@@ -83,9 +77,8 @@ public class AuthorController : ControllerBase
         {
             if (authorCreateDto == null)
                 return BadRequest(ModelState);
-
-            var author = _mapper.Map<Author>(authorCreateDto);
-            var isCreated = await _authorRepo.CreateAsync(author);
+            
+            var isCreated = await _authorRepo.Create(authorCreateDto);
             if (isCreated == false)
                 return NotFound();
 
@@ -106,9 +99,8 @@ public class AuthorController : ControllerBase
         {
             if (authorCreateDto == null || ModelState.IsValid == false)
                 return BadRequest(ModelState);
-
-            var author = _mapper.Map<Author>(authorCreateDto);
-            var isUpdated = await _authorRepo.UpdateAsync(author);
+            
+            var isUpdated = await _authorRepo.UpdateAsync(authorCreateDto);
             if (isUpdated == false)
                 return NotFound(ModelState);
 

@@ -15,3 +15,4 @@ global using Microsoft.AspNetCore.Mvc;
 global using AutoMapper.QueryableExtensions;
 global using BookStore.API.Repositories.Services;
 global using BookStore.API.Static;
+global using BookStore.API.Mapping;

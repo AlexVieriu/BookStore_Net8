@@ -7,9 +7,13 @@ builder.Services.AddIdentityCore<ApiUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<BookStoreContext>();
 
+builder.Services.AddAutoMapper(typeof(MapConfig));
 
+builder.Services.AddScoped<IAuthorRepository,AuthorRepository>();   
+builder.Services.AddScoped<IBookRepository,BookRepository>();
 
-// Add services to the container.
+builder.Services.AddScoped<INewAuthorRepository, NewAuthorRepository>();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

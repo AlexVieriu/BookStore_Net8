@@ -39,7 +39,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         var totalSize = await _context.Set<T>().CountAsync();
         var items = await _context.Set<T>().Skip(queryParams.StartIdex)
-                                           .Take(totalSize)
+                                           .Take(queryParams.PageSize)
                                            .ProjectTo<TResult>(_mapper.ConfigurationProvider)
                                            .ToListAsync();
 
