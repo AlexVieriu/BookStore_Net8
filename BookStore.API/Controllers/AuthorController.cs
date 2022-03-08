@@ -39,11 +39,7 @@ public class AuthorController : ControllerBase
     {
         try
         {
-            var authors = await _authorRepo.GetAllAsync();
-            var authorsDto = _mapper.Map<List<AuthorReadDto>>(authors);
-
-            return authorsDto;
-
+            return await _authorRepo.GetAllAsync<AuthorReadDto>();
         }
         catch (Exception ex)
         {
@@ -84,8 +80,7 @@ public class AuthorController : ControllerBase
             if (authorCreateDto == null)
                 return BadRequest(ModelState);
 
-            var author = _mapper.Map<Author>(authorCreateDto);
-            var isCreated = await _authorRepo.CreateAsync(author);
+            var isCreated = await _authorRepo.CreateAsync(authorCreateDto);
             if (isCreated == false)
                 return NotFound();
 
@@ -107,8 +102,7 @@ public class AuthorController : ControllerBase
             if (authorCreateDto == null || ModelState.IsValid == false)
                 return BadRequest(ModelState);
 
-            var author = _mapper.Map<Author>(authorCreateDto);
-            var isUpdated = await _authorRepo.UpdateAsync(author);
+            var isUpdated = await _authorRepo.UpdateAsync(authorCreateDto);
             if (isUpdated == false)
                 return NotFound(ModelState);
 

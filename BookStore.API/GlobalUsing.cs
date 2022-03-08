@@ -16,3 +16,9 @@ global using AutoMapper.QueryableExtensions;
 global using BookStore.API.Repositories.Services;
 global using BookStore.API.Static;
 global using BookStore.API.Mapping;
+global using Microsoft.IdentityModel.Tokens;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using System.Text;
+global using Microsoft.OpenApi.Models;
+

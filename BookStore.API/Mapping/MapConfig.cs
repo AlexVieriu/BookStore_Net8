@@ -4,7 +4,7 @@ public class MapConfig : Profile
     public MapConfig()
     {
         // User
-        CreateMap<ApiUser, UserLogin>().ReverseMap();
+        CreateMap<ApiUser, UserRegister>().ReverseMap();
 
         // Author
         CreateMap<Author, AuthorReadDto>().ReverseMap();

@@ -1,11 +1,11 @@
 ﻿namespace BookStore.API.Repositories.Contracts;
-public interface IBaseRepository<T>
-{
-    Task<VirtualizeResponse<TResult>> GetAllWithPg<TResult>(QueryParameters queryParams) where TResult : class;
-    Task<List<T>> GetAllAsync();
-    Task<T> GetAsync(int? id);
-    Task<bool> CreateAsync(T entity);
-    Task<bool> UpdateAsync(T entity);
-    Task<bool> DeleteAsync(int id);
 
+public interface IBaseRepository<T> where T : class
+{
+    Task<bool> CreateAsync<TMap>(TMap entityDto) where TMap : class;
+    Task<bool> DeleteAsync(int id);
+    Task<List<TMap>> GetAllAsync<TMap>() where TMap : class;
+    Task<VirtualizeResponse<TMap>> GetAllWithPg<TMap>(QueryParameters queryParams) where TMap : class;
+    Task<TMap> GetAsync<TMap>(int? id) where TMap : class;
+    Task<bool> UpdateAsync<TMap>(TMap entityDto) where TMap : class;
 }

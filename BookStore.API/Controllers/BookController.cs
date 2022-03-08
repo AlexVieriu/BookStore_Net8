@@ -36,7 +36,7 @@ public class BookController : ControllerBase
     {
         try
         {
-            var books = await _bookRepo.GetAllBooksAsync();
+            var books = await _bookRepo.GetAllAsync<BookReadDto>();
             if (books == null)
                 return NotFound();
 
@@ -76,9 +76,8 @@ public class BookController : ControllerBase
         {
             if (bookCreateDto == null || ModelState.IsValid == false)
                 return BadRequest(ModelState);
-
-            var book = _mapper.Map<Book>(bookCreateDto);
-            var isCreated = await _bookRepo.CreateAsync(book);
+            
+            var isCreated = await _bookRepo.CreateAsync(bookCreateDto);
             if (isCreated == false)
                 return false;
 
@@ -97,9 +96,8 @@ public class BookController : ControllerBase
         {
             if (bookUpdateDto == null || ModelState.IsValid == false)
                 return BadRequest(ModelState);
-
-            var book = _mapper.Map<Book>(bookUpdateDto);
-            var isUpdated = await _bookRepo.UpdateAsync(book);
+            
+            var isUpdated = await _bookRepo.UpdateAsync(bookUpdateDto);
             if (isUpdated == false)
                 return false;
 

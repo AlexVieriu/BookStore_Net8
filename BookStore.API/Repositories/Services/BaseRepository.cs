@@ -10,16 +10,19 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         _mapper = mapper;
     }
 
-    public async Task<bool> CreateAsync(T entity)
+    public async Task<bool> CreateAsync<TMap>(TMap entityDto) where TMap : class
     {
-        await _context.AddAsync(entity);
+        var entity = _mapper.Map<T>(entityDto);
+
+        await _context.AddAsync(entity);        
         var result = await _context.SaveChangesAsync();
+
         return result > 0;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
-        var entity = await GetAsync(id);
+        var entity = await _context.Set<T>().FindAsync(id);
         if (entity == null)
             return false;
 
@@ -29,30 +32,37 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         return result > 0;
     }
 
-    public async Task<List<T>> GetAllAsync()
+    public async Task<List<TMap>> GetAllAsync<TMap>() where TMap : class
     {
-        return await _context.Set<T>().ToListAsync();
+        var entitiesDto = await _context.Set<T>().ProjectTo<TMap>(_mapper.ConfigurationProvider)
+                                                 .ToListAsync();
+
+        return entitiesDto;
     }
 
-    public async Task<VirtualizeResponse<TResult>> GetAllWithPg<TResult>(QueryParameters queryParams)
-        where TResult : class
+    public async Task<VirtualizeResponse<TMap>> GetAllWithPg<TMap>(QueryParameters queryParams)
+        where TMap : class
     {
         var totalSize = await _context.Set<T>().CountAsync();
         var items = await _context.Set<T>().Skip(queryParams.StartIdex)
                                            .Take(queryParams.PageSize)
-                                           .ProjectTo<TResult>(_mapper.ConfigurationProvider)
+                                           .ProjectTo<TMap>(_mapper.ConfigurationProvider)
                                            .ToListAsync();
 
-        return new VirtualizeResponse<TResult> { Items = items, TotalSize = totalSize };
+        return new VirtualizeResponse<TMap> { Items = items, TotalSize = totalSize };
     }
 
-    public async Task<T> GetAsync(int? id)
+    public async Task<TMap> GetAsync<TMap>(int? id) where TMap : class
     {
-        return await _context.Set<T>().FindAsync(id);
+        var entity = await _context.Set<T>().FindAsync(id);
+        var entityDto = _mapper.Map<TMap>(entity);
+
+        return entityDto;
     }
 
-    public async Task<bool> UpdateAsync(T entity)
+    public async Task<bool> UpdateAsync<TMap>(TMap entityDto) where TMap : class
     {
+        var entity = _mapper.Map<T>(entityDto);
         _context.Update(entity);
         var result = await _context.SaveChangesAsync();
 

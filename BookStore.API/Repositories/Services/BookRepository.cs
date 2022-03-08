@@ -11,14 +11,6 @@ public class BookRepository : BaseRepository<Book>, IBookRepository
         _mapper = mapper;
     }
 
-    public async Task<List<BookReadDto>> GetAllBooksAsync()
-    {
-        var books = await _context.Books.Include(q => q.Author)
-                                        .ProjectTo<BookReadDto>(_mapper.ConfigurationProvider)
-                                        .ToListAsync();
-        return books;
-    }
-
     public async Task<BookReadDto> GetBookAsync(int id)
     {
         var book = await _context.Books.Include(q => q.Author)
