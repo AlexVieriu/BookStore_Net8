@@ -1,6 +1,7 @@
 ﻿namespace BookStore.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class AuthorController : ControllerBase
 {
     private readonly IAuthorRepository _authorRepo;
@@ -35,6 +36,7 @@ public class AuthorController : ControllerBase
     // GET: api/authors
     [HttpGet()]
     [Route("/api/Authors")]
+    [Authorize(Roles = "User")]
     public async Task<ActionResult<List<AuthorReadDto>>> GetAuthors()
     {
         try
@@ -51,6 +53,7 @@ public class AuthorController : ControllerBase
 
     // GET: api/author/5
     [HttpGet("{id:int}")]
+    [Authorize(Roles = "User,Administrator")]
     public async Task<ActionResult<AuthorReadDto>> GetAuthor(int id)
     {
         try
