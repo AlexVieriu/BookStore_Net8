@@ -1,4 +1,4 @@
-namespace BookStore.UI.Repositories.Services.Base;
+namespace BookStore.UI.Repositories.Base;
 
 using System = global::System;
 

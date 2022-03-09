@@ -2,5 +2,5 @@
 public static class Token
 {
     public const string accessToken = "accessToken";
-    public const string tokentype = "bearer";
+    public const string tokenType = "bearer";
 }
