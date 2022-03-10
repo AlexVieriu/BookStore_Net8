@@ -1,1 +1,73 @@
-﻿
+﻿@page "/register"
+
+@inject IUserService userService
+@inject NavigationManager navManager
+
+<div class="card p-4 mt-5 col-6">
+    @if (response.Success == false)
+    {
+        <h5 class="alert alert-danger">@response.Message</h5>
+    }
+
+    <br />
+    <EditForm Model="UserRegister" OnValidSubmit="OnUserRegister">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label class="fw-bold">UserName</label>
+            <InputText class="form-control" @bind-Value="UserRegister.UserName" />
+        </div>
+
+        <div>
+            <label class="fw-bold">Password</label>
+            <InputText class="form-control" @bind-Value="UserRegister.Password" type="password" />
+        </div>
+
+        <div>
+            <label class="fw-bold">Email</label>
+            <InputText class="form-control" @bind-Value="UserRegister.Email" />
+        </div>
+
+        <div>
+            <label class="fw-bold">First Name</label>
+            <InputText class="form-control" @bind-Value="UserRegister.FirstName" />
+        </div>
+
+        <div>
+            <label class="fw-bold">LastName</label>
+            <InputText class="form-control" @bind-Value="UserRegister.LastName" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-primary">Register User</button>
+    </EditForm>
+</div>
+
+
+
+@code {
+    UserRegister UserRegister = new();
+    Response<bool> response = new() { Success = true };
+
+    protected override void OnInitialized()
+    {
+        UserRegister = new()
+        {
+            UserName = "alex1",
+            FirstName = "Vieriu",
+            LastName = "Alexandru",
+            Email = "vieriu@bookstore.com",
+            Password = "Calorifer21@!",
+            Role = UserRole.Administrator
+        };
+    }
+
+    private async Task OnUserRegister()
+    {
+        response = await userService.RegisterAsync(UserRegister);
+        if (response.Success)
+            navManager.NavigateTo("/");
+    }
+}

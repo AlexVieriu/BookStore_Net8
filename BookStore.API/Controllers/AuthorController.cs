@@ -97,8 +97,8 @@ public class AuthorController : ControllerBase
     }
 
     // PUT: api/author
-    [HttpPut()]
-    public async Task<ActionResult<bool>> UpdateAuthor(AuthorUpdateDto authorCreateDto)
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<bool>> UpdateAuthor([FromBody]AuthorUpdateDto authorCreateDto,int id)
     {
         try
         {

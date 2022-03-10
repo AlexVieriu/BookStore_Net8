@@ -89,8 +89,8 @@ public class BookController : ControllerBase
             return StatusCode(500, ErrorMsg.StatusCode500(ex));
         }
     }
-    [HttpPut]
-    public async Task<ActionResult<bool>> UpdateBook([FromBody] BookUpdateDto bookUpdateDto)
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<bool>> UpdateBook([FromBody] BookUpdateDto bookUpdateDto, int id)
     {
         try
         {

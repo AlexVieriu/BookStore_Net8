@@ -11,7 +11,7 @@ public class BaseHttpService
     }
 
     // converting the api exceptions 
-    protected Response<Guid> ConvertApiException(ApiException exception)
+    protected Response<Guid> ConvertApiException<Guid>(ApiException exception)
     {
         if(exception.StatusCode >=200 && exception.StatusCode <=299)
         {
@@ -50,7 +50,10 @@ public class BaseHttpService
 
     protected async Task GetJwt()
     {
+        //take the token from localhost, where is saved when i login
         var token = await _localStorage.GetItemAsync<string>(Token.accessToken);
+
+        // put the token in the HttpHeader when we send the request 
         if(token != null)
             _client.HttpClient.DefaultRequestHeaders.Authorization = 
                 new AuthenticationHeaderValue(Token.tokenType, token);  

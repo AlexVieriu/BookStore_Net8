@@ -10,3 +10,6 @@ global using AutoMapper;
 global using System.Net.Http.Headers;
 global using BookStore.UI.Providers;
 global using BookStore.UI.Repositories.Base;
+global using BookStore.UI.Repositories.Contracts;
+global using BookStore.UI.Repositories.Services;
+global using BookStore.UI.MappingUI;
