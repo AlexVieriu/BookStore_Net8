@@ -36,7 +36,7 @@ public class AuthorController : ControllerBase
     // GET: api/authors
     [HttpGet()]
     [Route("/api/Authors")]
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "User,Administrator")]
     public async Task<ActionResult<List<AuthorReadDto>>> GetAuthors()
     {
         try

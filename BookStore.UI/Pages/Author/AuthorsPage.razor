@@ -1,1 +1,66 @@
-﻿
+﻿@page "/authors"
+
+@inject IAuthorService authorService
+@inject NavigationManager navManager
+
+@if (Authors != null)
+{
+    <a class="btn btn-lg btn-success" href="/author/create">Create Author</a>
+    <br />
+    <br />
+
+    @if (Response.Success == false)
+    {
+        <div class="alert alert-danger">@(Response.Message + " - " + Response.ValidationErrors)</div>
+        <br />
+    }
+    <table class="table table-responsive">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var author in Authors)
+            {
+                <tr>
+                    <td>@author.Id</td>
+                    <td>@author.FirstName</td>
+                    <td>@author.LastName</td>
+                    <td>
+                        <a href="/author/view/@author.Id" class="btn btn-primary">
+                            <span class="oi oi-eye me-2"></span>View
+                        </a>
+                        <a href="/author/update/@author.Id" class="btn btn-warning">
+                            <span class="oi oi-eye me-2"></span>Update
+                        </a>
+                        <button @onclick="(() => OnDeleteAuthor(author.Id))" class="btn btn-danger">
+                            <span class="oi oi-eye me-2"></span>Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<AuthorReadDto>? Authors;
+    Response<List<AuthorReadDto>> Response = new() { Success = true };
+
+    protected async override Task OnInitializedAsync()
+    {
+        Response = await authorService.GetAuthorsAsync();
+        if (Response.Success)
+            Authors = Response.Data;
+    }
+
+    private async Task OnDeleteAuthor(int idAuthor)
+    {
+        var response = await authorService.DeleteAuthorAsync(idAuthor);
+    }
+}
