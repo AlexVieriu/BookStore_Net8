@@ -75,6 +75,22 @@ public class AuthorService : BaseHttpService, IAuthorService
         return response;
     }
 
+    public async Task<Response<AuthorReadDtoVirtualizeResponse>> GetAuthorsWithPg(QueryParameters queryParams)
+    {
+        Response<AuthorReadDtoVirtualizeResponse> response;
+        try
+        {
+            await GetJwt();
+            var data = await _client.AuthorsWithPgAsync(queryParams.StartIndex, queryParams.PageSize);
+            response = new() { Success = true, Data = data };   
+        }
+        catch (ApiException ex)
+        {
+            response = ConvertApiException<AuthorReadDtoVirtualizeResponse>(ex);
+        }
+        return response;
+    }
+
     public async Task<Response<int>> UpdateAuthorAsync(int id, AuthorUpdateDto author)
     {
         Response<int> response;
@@ -86,7 +102,7 @@ public class AuthorService : BaseHttpService, IAuthorService
         }
         catch (ApiException ex)
         {
-            return response = ConvertApiException<int>(ex); 
+            return response = ConvertApiException<int>(ex);
         }
         return response;
     }
