@@ -4,10 +4,9 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
 
-  <ItemGroup>
+   <ItemGroup>
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	  <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="7.0.0-preview.1.22109.13" />
@@ -19,12 +18,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Providers\" />
-    <Folder Include="Repositories\Services\" />
+    <Folder Include="Compoents\" />
+    <Folder Include="Models\" />
+    <Folder Include="Pages\Author\" />
+    <Folder Include="Pages\Book\" />
+    <Folder Include="Pages\User\" />
+    <Folder Include="Repositories\Author\" />
+    <Folder Include="Repositories\Base\" />
+    <Folder Include="Repositories\Book\" />
+    <Folder Include="Repositories\User\" />
   </ItemGroup>
 
 </Project>
