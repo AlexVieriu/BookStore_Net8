@@ -26,8 +26,9 @@ public class BaseHttpClient
         {
             return new Response<Guid>
             {
-                Message = "Validation Erros",
-                Success = false
+                Message = "Validation Erros",                
+                ValidationErrors = $"{ex.InnerException} - {ex.Message}",
+                Success = false,
             };
         }
         if (ex.StatusCode == 404)
@@ -35,12 +36,14 @@ public class BaseHttpClient
             return new Response<Guid>
             {
                 Message = "Item not found",
+                ValidationErrors = $"{ex.InnerException} - {ex.Message}",
                 Success = false
             };
         }
         return new Response<Guid>
         {
             Message = "Something whent wrong, try again",
+            ValidationErrors = $"{ex.InnerException} - {ex.Message}",
             Success = false
         };
     }

@@ -1,0 +1,73 @@
+﻿@page "/register"
+
+@inject IUserService userService
+@inject NavigationManager navManager
+
+<h4>Login Page</h4>
+
+@if (response?.Success == false)
+{
+    <div class="alert alert-danger">@response.ValidationErrors - @response.Message</div>
+}
+
+<div class="card p-4 mt-5 col-4">
+    <EditForm Model="userRegister" OnValidSubmit="OnRegisterUser">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label class="fw-bolder">User Name</label>
+            <InputText class="form-control mb-3" @bind-Value="userRegister.UserName" />
+        </div>
+
+        <div>
+            <label class="fw-bolder">User Name</label>
+            <InputText class="form-control mb-3" @bind-Value="userRegister.FirstName" />
+        </div>
+
+        <div>
+            <label class="fw-bolder">User Name</label>
+            <InputText class="form-control mb-3" @bind-Value="userRegister.LastName" />
+        </div>
+
+        <div>
+            <label class="fw-bolder">User Name</label>
+            <InputText class="form-control mb-3" @bind-Value="userRegister.Email" />
+        </div>
+
+        <div>
+            <label class="fw-bolder">Password</label>
+            <InputText class="form-control mb-3" @bind-Value="userRegister.Password" type="password" />
+        </div>
+
+        <button class="btn btn-primary mt-2" type="submit">
+            <span class="oi oi-plus me-2"></span>Register User
+        </button>
+    </EditForm>
+</div>
+
+
+@code {
+    UserRegister userRegister;
+    Response<bool>? response = new() { Success = true };
+
+    protected override async Task OnInitializedAsync()
+    {
+        userRegister = new()
+        {
+            UserName = "alex7",
+            FirstName = "vieriu",
+            LastName = "alexandru",
+            Email = "vieriu.alexandru@bookstore.com",
+            Password = "Calorifer21@!",
+            Role = "Administrator"
+        };
+    }
+
+    private async Task OnRegisterUser()
+    {
+        response = await userService.RegisterAsync(userRegister);
+        if (response.Success)
+            navManager.NavigateTo("/login");
+    }
+}

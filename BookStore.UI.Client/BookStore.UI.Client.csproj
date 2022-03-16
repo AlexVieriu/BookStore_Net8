@@ -6,6 +6,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Remove="Pages\Author\AuthorCreatePage.razor" />
+  </ItemGroup>
+
    <ItemGroup>
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 	  <PackageReference Include="Blazored.LocalStorage" Version="4.2.0" />
@@ -19,14 +23,19 @@
 
   <ItemGroup>
     <Folder Include="Compoents\" />
-    <Folder Include="Models\" />
-    <Folder Include="Pages\Author\" />
-    <Folder Include="Pages\Book\" />
-    <Folder Include="Pages\User\" />
-    <Folder Include="Repositories\Author\" />
-    <Folder Include="Repositories\Base\" />
     <Folder Include="Repositories\Book\" />
-    <Folder Include="Repositories\User\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\Author\AuthorCreatePage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Author\AuthorCreatePage.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Author\AuthorCreatePage.razor" />
   </ItemGroup>
 
 </Project>

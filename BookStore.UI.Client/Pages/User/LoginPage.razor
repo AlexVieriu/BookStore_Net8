@@ -1,0 +1,48 @@
+﻿@page "/login"
+
+@inject IUserService userService
+@inject NavigationManager navManager
+
+
+<h4>Login Page</h4>
+
+@if (response.Success == false)
+{
+    <div class="alert alert-danger">@response.ValidationErrors</div>
+}
+
+<div class="card p-4 mt-5 col-4">
+    <EditForm Model="userLogin" OnValidSubmit="OnLoginUser">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label class="fw-bolder">User Name</label>
+            <InputText class="form-control mb-4" @bind-Value="userLogin.UserName" />
+        </div>
+
+        <div>
+            <label class="fw-bolder">Password</label>
+            <InputText class="form-control" @bind-Value="userLogin.Password" type="password" />
+        </div>
+        <br />
+
+        <button class="btn btn-primary" type="submit">
+            <span class="oi oi-key me-3"></span>Login
+        </button>
+    </EditForm>
+</div>
+
+
+
+@code {
+    UserLogin userLogin = new();
+    Response<bool>? response = new() { Success = true };
+
+    private async Task OnLoginUser()
+    {
+        response = await userService.LoginAsync(userLogin);
+        if (response.Success)
+            navManager.NavigateTo("/");
+    }
+}
