@@ -1,1 +1,60 @@
-﻿
+﻿@page "/author/update/{id:int}"
+
+@inject IAuthorService authorService
+@inject NavigationManager navManager
+@inject IMapper mapper
+
+<h4>Update Author</h4>
+
+@if (Author != null)
+{
+    <div class="card p-4 mt-5 col-4">
+        <EditForm Model="Author" OnValidSubmit="OnUpdateAuthor">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div>
+                <label class="fw-bold">First Name</label>
+                <InputText class="form-control mb-3" @bind-Value="Author.FirstName" />
+            </div>
+
+            <div>
+                <label class="fw-bold">Last Name</label>
+                <InputText class="form-control mb-3" @bind-Value="Author.LastName" />
+            </div>
+
+            <div>
+                <label class="fw-bold">Bio</label>
+                <InputText class="form-control mb-3" @bind-Value="Author.Bio" />
+            </div>
+            <br />
+
+            <button class="btn btn-primary" type="submit">Update Author</button>
+        </EditForm>
+    </div>
+}
+
+@code {
+    AuthorUpdateDto Author;
+    Response<AuthorReadDto> responseGet = new();
+    Response<int> responseUpdate = new();
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Author = new();
+        responseGet = await authorService.GetAuthorAsync(Id);
+        if (responseGet.Success)
+            Author = mapper.Map<AuthorUpdateDto>(responseGet.Data);
+
+    }
+
+    private async Task OnUpdateAuthor()
+    {
+        responseUpdate = await authorService.UpdateAuthorAsync(Id, Author);
+        if (responseUpdate.Success == true)
+            navManager.NavigateTo("/authors");
+    }
+}

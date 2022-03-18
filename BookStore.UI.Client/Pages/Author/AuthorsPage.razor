@@ -1,9 +1,80 @@
 ﻿@page "/authors"
 
 @inject IAuthorService authorService
-@inject NavigationManager navManager
+@inject IJSRuntime js
+
+<h4>List of Authors</h4>
+
+@if (Authors != null)
+{
+    <a class="btn btn-success btn-lg my-4" href="/author/create">
+        <span class="oi oi-plus me-2"></span>Create Author
+    </a>
+
+    @if (responseGet.Success == false)
+    {
+        <div class="alert alert-dange">@($"{responseGet.Message} - {responseGet.ValidationErrors}")</div>
+    }
+    @if (responseDelete.Success == false)
+    {
+        <div class="alert alert-dange">@($"{responseDelete.Message} - {responseDelete.ValidationErrors}")</div>
+    }
+
+    <VirtualizedComp Context="author" Items="Authors" OnScroll="OnLoadAuthors" TotalSize="TotalSize">
+        <TableHeader>
+            <th>Id</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Bio</th>
+            <th>Actions</th>
+        </TableHeader>
+
+        <TableBody>
+            <td>@author.Id</td>
+            <td>@author.FirstName</td>
+            <td>@author.LastName</td>
+            <td>@author.Bio</td>
+            <td>
+                <a class="btn btn-primary" href="/author/view/@author.Id">
+                    <span class="oi oi-eye me-2"></span> View
+                </a>
+                <a class="btn btn-warning" href="/author/update/@author.Id">
+                    <span class="oi oi-pencil me-2"></span> Update
+                </a>
+                <button class="btn btn-danger" @onclick="(() => OnDeleteAuthor(author.Id))">
+                    <span class="oi oi-trash me-2"></span> Delete
+                </button>
+            </td>
+        </TableBody>
+    </VirtualizedComp>
+}
 
 
-@code{
-    
+@code {
+    List<AuthorReadDto>? Authors = new();
+    Response<AuthorReadDtoVirtualizeResponse> responseGet = new() { Success = true };
+    Response<int> responseDelete = new() { Success = true };
+    public int TotalSize { get; set; }
+
+    private async Task OnLoadAuthors(QueryParameters queryParams)
+    {
+        responseGet = await authorService.GetAuthorsWithPgAsync(queryParams);
+        if (responseGet.Success == true)
+        {
+            Authors = responseGet.Data.Items.ToList();
+            TotalSize = responseGet.Data.TotalSize;
+        }
+    }
+
+    private async Task OnDeleteAuthor(int idAuthor)
+    {
+        var author = Authors.First(q => q.Id == idAuthor);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Are you sure you want to delete {author.FirstName} {author.LastName}");
+        if (confirm)
+        {
+            responseDelete = await authorService.DeleteAuthorAsync(idAuthor);
+            if (responseDelete.Success)
+                await OnInitializedAsync();
+        }
+    }
 }

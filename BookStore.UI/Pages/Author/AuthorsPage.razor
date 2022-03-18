@@ -10,11 +10,11 @@
 {
     <a class="btn btn-lg btn-success mb-5" href="/author/create">Create Author</a>
 
-    @if (Response.Success == false)
+@*    @if (Response.Success == false)
     {
         <div class="alert alert-danger">@(Response.Message + " - " + Response.ValidationErrors)</div>
         <br />
-    }
+    }*@
     
     <VirtualizedComp Items="Authors" TotalSize="TotalSize" Context="author" OnScroll="LoadAuthors">
         <TableHeader>
@@ -38,7 +38,7 @@
                     <span class="oi oi-pencil">
                     </span> Edit
                 </a>
-                <button class="btn btn-danger" @onclick="@(() => DeleteAuthor(@author.Id))">
+                <button class="btn btn-danger" @onclick="(() => DeleteAuthor(author.Id))">
                     <span class="oi oi-delete">
                     </span> Delete
                 </button>
@@ -49,7 +49,6 @@
 
 @code {
     List<AuthorReadDto>? Authors = new();
-    Response<List<AuthorReadDto>> Response = new() { Success = true };
     public int TotalSize { get; set; }
 
     private async Task LoadAuthors(QueryParameters queryParams)

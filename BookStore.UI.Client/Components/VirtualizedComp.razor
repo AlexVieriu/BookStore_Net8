@@ -1,0 +1,44 @@
+﻿@typeparam TItem
+
+<table class="table table-responsive">
+    <thead class="table-dark">
+        <tr>@TableHeader</tr>
+    </thead>
+
+    <tbody>
+        <Virtualize Context="item" ItemsProvider="LoadItems" TItem="TItem">
+            <ItemContent>
+                <tr>@TableBody(item)</tr>
+            </ItemContent>
+        </Virtualize>
+    </tbody>
+</table>
+
+
+@code {
+    [Parameter]
+    public List<TItem> Items { get; set; }
+
+    [Parameter]
+    public int TotalSize { get; set; }
+
+    [Parameter]
+    public EventCallback<QueryParameters> OnScroll { get; set; }
+
+    [Parameter]
+    public RenderFragment TableHeader { get; set; }
+
+    [Parameter, AllowNull]
+    public RenderFragment<TItem> TableBody { get; set; }
+
+    public async ValueTask<ItemsProviderResult<TItem>> LoadItems(ItemsProviderRequest request)
+    {
+        var nrEntitiesOnPage = Math.Min(request.Count, TotalSize - request.StartIndex);
+        await OnScroll.InvokeAsync(new QueryParameters()
+            {
+                StartIndex = request.StartIndex,
+                PageSize = nrEntitiesOnPage == 0 ? request.Count : nrEntitiesOnPage
+            });
+        return new ItemsProviderResult<TItem>(Items, TotalSize);
+    }
+}

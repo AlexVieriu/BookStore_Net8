@@ -1,6 +1,4 @@
-﻿using BookStore.UI.Client.Models;
-
-namespace BookStore.UI.Client.Repositories.Author;
+﻿namespace BookStore.UI.Client.Repositories.Author;
 public class AuthorService : BaseHttpClient, IAuthorService
 {
     private readonly ILocalStorageService _localStorage;
@@ -88,7 +86,7 @@ public class AuthorService : BaseHttpClient, IAuthorService
         try
         {
             await GetJwt();
-            var result = await _client.AuthorsWithPgAsync(queryParams.PageIndex, queryParams.PageSize);
+            var result = await _client.AuthorsWithPgAsync(queryParams.StartIndex, queryParams.PageSize);
             return response = new() { Success = true, Data = result };
         }
         catch (ApiException ex)
@@ -99,5 +97,19 @@ public class AuthorService : BaseHttpClient, IAuthorService
     }
 
     // update
-
+    public async Task<Response<int>> UpdateAuthorAsync(int id, AuthorUpdateDto author)
+    {
+        Response<int> response;
+        try
+        {
+            await GetJwt();
+            await _client.AuthorPUTAsync(id, author);
+            return response = new() { Success = true };
+        }
+        catch (ApiException ex)
+        {
+            response = ConvertApiException<int>(ex);
+        }
+        return response;
+    }
 }

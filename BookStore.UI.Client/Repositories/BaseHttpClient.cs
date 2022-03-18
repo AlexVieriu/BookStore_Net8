@@ -26,7 +26,7 @@ public class BaseHttpClient
         {
             return new Response<Guid>
             {
-                Message = "Validation Erros",                
+                Message = "Validation Erros",
                 ValidationErrors = $"{ex.InnerException} - {ex.Message}",
                 Success = false,
             };
@@ -52,7 +52,7 @@ public class BaseHttpClient
     {
         var token = await _localStorage.GetItemAsync<string>(TokenUI.TokenName);
 
-        if (string.IsNullOrEmpty(token))
+        if (string.IsNullOrEmpty(token) == false)
             _client.HttpClient.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue(TokenUI.TokenType, token);
     }
