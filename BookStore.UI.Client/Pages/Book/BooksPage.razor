@@ -1,1 +1,83 @@
-﻿
+﻿@page "/books"
+
+@inject IBookService bookService
+@inject IJSRuntime js
+
+<h4>List of Books</h4>
+<br />
+
+@if (Books != null)
+{
+    <a class="btn btn-success btn-lg my-3" href="/book/create">
+        <span class="oi oi-plus me-2"></span> Create Book
+    </a>
+
+    @if (responseGet.Success == false)
+    {
+        <div class="alert alert-danger">@responseGet.ValidationErrors</div>
+    }
+    @if (responseDelete.Success == false)
+    {
+        <div class="alert alert-danger">@responseDelete.ValidationErrors</div>
+    }  
+
+    <VirtualizedComp Context="book" Items="Books" OnScroll="LoadBooks" TotalSize="TotalSize">
+        <TableHeader>
+            <th>Image</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Author Name</th>
+            <th>Actions</th>
+        </TableHeader>
+
+
+        <TableBody>
+            <td>
+                <img src="@book.Image" width="100" height="100" alt="@book.Title">
+            </td>
+            <td>@book.Title</td>
+            <td>@book.Price.ToString("C")</td>
+            <td>
+                <a href="/book/view/@book.AuthorId">@book.AuthorName</a>
+            </td>
+            <td>
+                <a class="btn btn-primary" href="/book/view/@book.Id">
+                    <span class="oi oi-eye"></span> View
+                </a>
+                <a class="btn btn-warning" href="/book/view/@book.Id">
+                    <span class="oi oi-trash"></span> Update
+                </a>
+                <button class="btn btn-danger" @onclick="(() => OnDeleteBook(book.Id))">
+                    <span class="oi oi-trash"></span> Delete
+                </button>
+            </td>
+        </TableBody>
+    </VirtualizedComp>
+}
+
+
+@code {
+    List<BookReadDto>? Books = new();
+    Response<BookReadDtoVirtualizeResponse> responseGet = new() { Success = true };
+    Response<int> responseDelete = new() { Success = true };
+    public int TotalSize { get; set; }
+
+    public async Task LoadBooks(QueryParameters queryParams)
+    {
+        responseGet = await bookService.GetBooksWithPg(queryParams);
+        Books = responseGet.Data.Items.ToList();
+        TotalSize = responseGet.Data.TotalSize;
+    }
+
+    public async Task OnDeleteBook(int id)
+    {
+        var book = Books.First(q => q.Id == id);
+        var confirm = await js.InvokeAsync<bool>("confirm", $"Are you sure you want to delete {book.Title}");
+        if (confirm)
+        {
+            responseDelete = await bookService.DeleteBook(id);
+            if (responseDelete.Success)
+                await OnInitializedAsync();
+        }
+    }
+}

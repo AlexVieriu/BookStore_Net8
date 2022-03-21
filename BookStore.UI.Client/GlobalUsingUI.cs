@@ -6,6 +6,7 @@ global using BookStore.UI.Client.Models;
 global using BookStore.UI.Client.Providers;
 global using BookStore.UI.Client.Repositories.Author;
 global using BookStore.UI.Client.Repositories.Base;
+global using BookStore.UI.Client.Repositories.Book;
 global using BookStore.UI.Client.Repositories.User;
 global using BookStore.UI.Client.Static;
 global using Microsoft.AspNetCore.Components.Authorization;

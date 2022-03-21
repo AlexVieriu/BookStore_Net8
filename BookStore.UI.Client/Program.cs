@@ -15,6 +15,7 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<IClient, Client>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookService, BookService>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(MapperConfigUI));

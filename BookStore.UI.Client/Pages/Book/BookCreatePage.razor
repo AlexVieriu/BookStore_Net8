@@ -1,1 +1,110 @@
-﻿
+﻿@page "/book/create"
+
+@inject IBookService bookService
+@inject IAuthorService authorService
+@inject NavigationManager navManager
+
+<h4>Create Book</h4>
+<br />
+
+<div class="card p-4 mt-5 col-4">
+    <EditForm Model="Book" OnValidSubmit="OnSelectedFile">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div>
+            <label class="fw-bold">Title</label>
+            <InputText class="form-control me-2" @bind-Value="Book.Title" />
+        </div>
+
+        <div>
+            <label class="fw-bold">Year</label>
+            <InputNumber class="form-control me-2" @bind-Value="Book.Year" />
+        </div>
+
+        <div>
+            <label class="fw-bold">Isbn</label>
+            <InputText class="form-control me-2" @bind-Value="Book.Isbn" />
+        </div>
+
+        <div>
+            <label class="fw-bold">Price</label>
+            <InputNumber class="form-control me-2" @bind-Value="Book.Price.ToString(" C")" />
+        </div>
+
+        <div>
+            <label class="fw-bold">Summary</label>
+            <InputTextArea class="form-control me-2" @bind-Value="Book.Summary" />
+        </div>
+
+        <div>
+            <label class="fw-bold">Authors</label>
+            <InputSelect class="form-select" @bind-Value="Book.AuthorId">
+                <option value="">--- Select Author ---</option>
+                @foreach (var author in Authors)
+                {
+                    <option value="@author.Id">@author.FirstName @author.LastName</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div>
+            <label class="fw-bold">Book Cover Photo</label>
+            <InputFile OnChange="OnSelectedFile">
+                <img src="@img" width="200" height="200" class="img-thumbnail" />
+                <p class="text-danger">@UploadFileWarning</p>
+            </InputFile>
+        </div>
+
+        <br>
+
+        <div class="d-flex justify-content-around">
+            <button class="btn btn-primary col-5" type="submit">
+                <span class="oi oi-plus me-2"></span> Create Book
+            </button>
+
+            <a href="/books" class="btn btn-secondary col-5">
+                <span class="oi oi-media-skip-backward"></span> Back To List
+            </a>
+        </div>
+
+    </EditForm>
+</div>
+
+
+@code {
+    BookCreateDto Book = new();
+    List<AuthorReadDto> Authors = new();
+    Response<int> ResponseCreate = new() { Success = true };
+    string? img = "";
+    string? UploadFileWarning = "";
+    int imgMaxSize = 1054 * 1054 * 5;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await authorService.GetAuthorsAsync();
+        if (response.Success)
+            Authors = response.Data;
+    }
+
+    private async Task OnCreateBook()
+    {
+        ResponseCreate = await bookService.CreateBook(Book);
+        if (ResponseCreate.Success)
+            navManager.NavigateTo("/books");
+    }
+
+    private async Task OnSelectedFile(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file != null)
+        {
+            if(file.Size > imgMaxSize)
+            {
+                UploadFileWarning = "Please select a img less then 5Mb";
+                return;
+            }
+
+        }
+    }
+}

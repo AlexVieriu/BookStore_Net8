@@ -22,6 +22,7 @@ public class BookCreateDto
 
     public int AuthorId { get; set; }
 
+    public string? Image { get; set; }
     public string? ImageData { get; set; }
     public string? OriginalImageName { get; set; }
 }

@@ -7,14 +7,20 @@ public class BookController : ControllerBase
     private readonly IBookRepository _bookRepo;
     private readonly ILogger<BookController> _logger;
     private readonly IMapper _mapper;
+    private readonly IWebHostEnvironment _webHost;
 
-    public BookController(IBookRepository bookRepo, ILogger<BookController> logger, IMapper mapper)
+    public BookController(IBookRepository bookRepo,
+                          ILogger<BookController> logger,
+                          IMapper mapper,
+                          IWebHostEnvironment webHost)
     {
         _bookRepo = bookRepo;
         _logger = logger;
         _mapper = mapper;
+        _webHost = webHost;
     }
 
+    // GET: api/Book/?stratindex=0&pagesize=15
     [HttpGet()]
     [Route("/api/BooksWithPg")]
     public async Task<ActionResult<VirtualizeResponse<BookReadDto>>> GetBooksWithPg([FromQuery] QueryParameters queryParams)
@@ -30,6 +36,7 @@ public class BookController : ControllerBase
         }
     }
 
+    // GET: api/Books
     [HttpGet()]
     [Route("/api/Books")]
     public async Task<ActionResult<List<BookReadDto>>> GetBooks()
@@ -48,6 +55,8 @@ public class BookController : ControllerBase
             return StatusCode(500, ErrorMsg.StatusCode500(ex));
         }
     }
+
+    // GET: api/Books/5
     [HttpGet("{id:int}")]
     public async Task<ActionResult<BookReadDto>> GetAuthor(int id)
     {
@@ -69,6 +78,7 @@ public class BookController : ControllerBase
         }
     }
 
+    // POST: api/Books
     [HttpPost]
     public async Task<ActionResult<bool>> CreateBook([FromBody] BookCreateDto bookCreateDto)
     {
@@ -76,7 +86,7 @@ public class BookController : ControllerBase
         {
             if (bookCreateDto == null || ModelState.IsValid == false)
                 return BadRequest(ModelState);
-            
+
             var isCreated = await _bookRepo.CreateAsync(bookCreateDto);
             if (isCreated == false)
                 return false;
@@ -89,6 +99,8 @@ public class BookController : ControllerBase
             return StatusCode(500, ErrorMsg.StatusCode500(ex));
         }
     }
+
+    // PUT: api/Books/5
     [HttpPut("{id:int}")]
     public async Task<ActionResult<bool>> UpdateBook([FromBody] BookUpdateDto bookUpdateDto, int id)
     {
@@ -96,7 +108,7 @@ public class BookController : ControllerBase
         {
             if (bookUpdateDto == null || ModelState.IsValid == false)
                 return BadRequest(ModelState);
-            
+
             var isUpdated = await _bookRepo.UpdateAsync(bookUpdateDto);
             if (isUpdated == false)
                 return false;
@@ -110,7 +122,7 @@ public class BookController : ControllerBase
         }
     }
 
-
+    // DELETE: api/Books/5
     [HttpDelete("{id:int}")]
     public async Task<ActionResult<bool>> DeleteBook(int id)
     {
