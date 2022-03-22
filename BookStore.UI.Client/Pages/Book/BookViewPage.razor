@@ -1,1 +1,69 @@
-﻿
+﻿@page "/book/view/{id:int}"
+
+@inject IBookService bookService
+@inject IAuthorService authorService
+@inject NavigationManager navManager
+
+<h4>View Book</h4>
+
+<div class="card p-4 mt-4 col-4">
+    <EditForm Model="Book">
+        <fieldset disabled="true">
+            <div>
+                <label class="fw-bold">Title</label>
+                <InputText class="form-control mb-3" @bind-Value="Book.Title" />
+            </div>
+
+            <div>
+                <label class="fw-bold">Year</label>
+                <InputNumber class="form-control mb-3" @bind-Value="Book.Year" />
+            </div>
+
+            <div>
+                <label class="fw-bold">Isbn</label>
+                <InputText class="form-control mb-3" @bind-Value="Book.Isbn" />
+            </div>
+
+            <div>
+                <label class="fw-bold">Price</label>
+                <InputNumber class="form-control mb-3" @bind-Value="Book.Price" />
+            </div>
+
+            <div>
+                <label class="fw-bold">Summary</label>
+                <InputTextArea class="form-control mb-3" @bind-Value="Book.Summary" />
+            </div>
+
+            <div>
+                <label class="fw-bold">Authors</label>
+                <InputText class="form-control mb-3" @bind-Value="Book.AuthorName" />
+            </div>
+
+
+            <label class="fw-bold">Book Cover Photo</label>
+            <br />
+            <img src="@Book.Image" width="200" height="200" class="img-thumbnail mb-5" />
+        </fieldset>
+
+        
+    </EditForm>
+    <a href="/books" class="btn btn-primary">
+            <span class="oi oi-media-skip-backward"></span> Back To List
+        </a>
+</div>
+
+
+
+@code {
+    BookReadDto Book = new();
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await bookService.GetBook(Id);
+        if (response.Success)
+            Book = response.Data;
+    }
+}

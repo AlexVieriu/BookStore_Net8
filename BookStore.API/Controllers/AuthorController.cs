@@ -20,6 +20,7 @@ public class AuthorController : ControllerBase
     // GET: api/Author/?startindex=0&pagesize=15
     [HttpGet]
     [Route("/api/AuthorsWithPg")]
+    [Authorize(Roles = ("User,Administrator"))]
     public async Task<ActionResult<VirtualizeResponse<AuthorReadDto>>> GetAuthorsWithPg([FromQuery] QueryParameters queryParams)
     {
         try
@@ -76,6 +77,7 @@ public class AuthorController : ControllerBase
 
     // POST: api/author
     [HttpPost()]
+    [Authorize(Roles = ("Administrator"))]
     public async Task<ActionResult<bool>> CreateAuthor([FromBody] AuthorCreateDto authorCreateDto)
     {
         try
@@ -98,6 +100,7 @@ public class AuthorController : ControllerBase
 
     // PUT: api/author
     [HttpPut("{id:int}")]
+    [Authorize(Roles = ("Administrator"))]
     public async Task<ActionResult<bool>> UpdateAuthor([FromBody]AuthorUpdateDto authorCreateDto,int id)
     {
         try
@@ -120,6 +123,7 @@ public class AuthorController : ControllerBase
 
     // DELETE: api/author/5
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = ("Administrator"))]
     public async Task<ActionResult<bool>> DeleteAuthor(int id)
     {
         try

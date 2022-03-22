@@ -1,7 +1,10 @@
 ﻿@page "/register"
 
+
 @inject IUserService userService
 @inject NavigationManager navManager
+
+@attribute [Authorize(Roles = UserRoles.Administrator)]
 
 <h4>Login Page</h4>
 

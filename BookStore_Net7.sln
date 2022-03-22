@@ -10,9 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.UI", "BookStore.UI\BookStore.UI.csproj", "{9562A81F-94D2-451B-AC28-D0063E98DD96}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookStore.UI.Client", "BookStore.UI.Client\BookStore.UI.Client.csproj", "{1E74059A-1C34-401E-8C87-81EA4117E28A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.UI.Client", "BookStore.UI.Client\BookStore.UI.Client.csproj", "{1E74059A-1C34-401E-8C87-81EA4117E28A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +22,6 @@ Global
 		{9D66C690-8FCE-4603-8B9B-4D224C6B14CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D66C690-8FCE-4603-8B9B-4D224C6B14CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D66C690-8FCE-4603-8B9B-4D224C6B14CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9562A81F-94D2-451B-AC28-D0063E98DD96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9562A81F-94D2-451B-AC28-D0063E98DD96}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9562A81F-94D2-451B-AC28-D0063E98DD96}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9562A81F-94D2-451B-AC28-D0063E98DD96}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1E74059A-1C34-401E-8C87-81EA4117E28A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1E74059A-1C34-401E-8C87-81EA4117E28A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E74059A-1C34-401E-8C87-81EA4117E28A}.Release|Any CPU.ActiveCfg = Release|Any CPU

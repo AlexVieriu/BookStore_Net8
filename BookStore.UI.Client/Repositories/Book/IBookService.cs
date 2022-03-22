@@ -6,5 +6,5 @@ internal interface IBookService
     Task<Response<int>> DeleteBook(int id);
     Task<Response<BookReadDtoVirtualizeResponse>> GetBooksWithPg(QueryParameters queryParams);
     Task<Response<BookReadDto>> GetBook(int id);
-    Task<Response<BookUpdateDto>> UpdateBook(int id, BookUpdateDto book);
+    Task<Response<int>> UpdateBook(int id, BookUpdateDto book);
 }

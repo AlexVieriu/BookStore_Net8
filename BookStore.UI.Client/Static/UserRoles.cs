@@ -1,6 +1,6 @@
 ﻿namespace BookStore.UI.Client.Static;
 public static class UserRoles
 {
-    public static string Administrator = "Administrator";
-    public static string User = "User";
+    public const string Administrator = "Administrator";
+    public const string User = "User";
 }

@@ -2,6 +2,7 @@
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class BookController : ControllerBase
 {
     private readonly IBookRepository _bookRepo;
@@ -23,6 +24,7 @@ public class BookController : ControllerBase
     // GET: api/Book/?stratindex=0&pagesize=15
     [HttpGet()]
     [Route("/api/BooksWithPg")]
+    [Authorize(Roles =("User,Administrator"))]
     public async Task<ActionResult<VirtualizeResponse<BookReadDto>>> GetBooksWithPg([FromQuery] QueryParameters queryParams)
     {
         try
@@ -39,6 +41,7 @@ public class BookController : ControllerBase
     // GET: api/Books
     [HttpGet()]
     [Route("/api/Books")]
+    [Authorize(Roles = ("User,Administrator"))]
     public async Task<ActionResult<List<BookReadDto>>> GetBooks()
     {
         try
@@ -58,6 +61,7 @@ public class BookController : ControllerBase
 
     // GET: api/Books/5
     [HttpGet("{id:int}")]
+    [Authorize(Roles = ("User,Administrator"))]
     public async Task<ActionResult<BookReadDto>> GetAuthor(int id)
     {
         try
@@ -80,12 +84,16 @@ public class BookController : ControllerBase
 
     // POST: api/Books
     [HttpPost]
+    [Authorize(Roles = ("Administrator"))]
     public async Task<ActionResult<bool>> CreateBook([FromBody] BookCreateDto bookCreateDto)
     {
         try
         {
             if (bookCreateDto == null || ModelState.IsValid == false)
                 return BadRequest(ModelState);
+
+            if (string.IsNullOrEmpty(bookCreateDto.Title) == false)
+                bookCreateDto.Image = CreateImg(bookCreateDto.ImageData, bookCreateDto.OriginalImageName);
 
             var isCreated = await _bookRepo.CreateAsync(bookCreateDto);
             if (isCreated == false)
@@ -102,12 +110,25 @@ public class BookController : ControllerBase
 
     // PUT: api/Books/5
     [HttpPut("{id:int}")]
+    [Authorize(Roles = ("Administrator"))]
     public async Task<ActionResult<bool>> UpdateBook([FromBody] BookUpdateDto bookUpdateDto, int id)
     {
         try
         {
             if (bookUpdateDto == null || ModelState.IsValid == false)
                 return BadRequest(ModelState);
+
+            if (string.IsNullOrEmpty(bookUpdateDto.ImageData) == false)
+            {
+                // delete old image 
+                var picName = Path.GetFileName(bookUpdateDto.Image);
+                var imgPath = $"{ _webHost.WebRootPath}\\BookCoverImages\\{picName}";
+                if (System.IO.File.Exists(imgPath))
+                    System.IO.File.Delete(imgPath);
+
+                // create new image
+                bookUpdateDto.Image = CreateImg(bookUpdateDto.ImageData, bookUpdateDto.OriginalImageName);
+            }
 
             var isUpdated = await _bookRepo.UpdateAsync(bookUpdateDto);
             if (isUpdated == false)
@@ -124,6 +145,7 @@ public class BookController : ControllerBase
 
     // DELETE: api/Books/5
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = ("Administrator"))]
     public async Task<ActionResult<bool>> DeleteBook(int id)
     {
         try
@@ -142,5 +164,31 @@ public class BookController : ControllerBase
             _logger.LogError($"Error at {nameof(DeleteBook)} - {ErrorMsg.StatusCode500(ex)}");
             return StatusCode(500, ErrorMsg.StatusCode500(ex));
         }
+    }
+
+    private string CreateImg(string? base64StringImg, string? OriginalNameImg)
+    {
+        // get the img path
+        var appUrl = HttpContext.Request.Host.Value;
+
+        // get extention
+        var ext = Path.GetExtension(OriginalNameImg);
+
+        // create img with extetion
+        var imgName = $"{Guid.NewGuid()}{ext}";
+
+        // get the path of the img folder
+        var path = $"{_webHost.WebRootPath}\\BookCoverImages\\{imgName}";
+
+        // convert base64StringImg to byte array so we can store the img
+        byte[] imgByte = Convert.FromBase64String(base64StringImg);
+
+        // store the img in the path we created
+        var fileStream = System.IO.File.Create(path);
+        fileStream.Write(imgByte, 0, imgByte.Length);
+        fileStream.Close();
+
+        // return the img url
+        return $"https://{appUrl}/BookCoverImages/{imgName}";
     }
 }

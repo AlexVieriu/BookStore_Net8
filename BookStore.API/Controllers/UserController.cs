@@ -52,6 +52,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("register")]
+    [Authorize(Roles = "Administrator")]
     public async Task<ActionResult<bool>> Register([FromBody] UserRegister register)
     {
         try
@@ -61,7 +62,7 @@ public class UserController : ControllerBase
 
             var user = _mapper.Map<ApiUser>(register);
             var isCreated = await _userManager.CreateAsync(user, register.Password);
-            if(isCreated.Succeeded == false)
+            if (isCreated.Succeeded == false)
             {
                 foreach (var error in isCreated.Errors)
                 {

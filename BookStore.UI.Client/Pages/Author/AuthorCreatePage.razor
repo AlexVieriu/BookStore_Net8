@@ -3,6 +3,8 @@
 @inject IAuthorService authorService
 @inject NavigationManager navManager
 
+@attribute [Authorize(Roles = UserRoles.Administrator)]
+
 <h4>Create Author</h4>
 
 <div class="card p-4 mt-5 col-4">

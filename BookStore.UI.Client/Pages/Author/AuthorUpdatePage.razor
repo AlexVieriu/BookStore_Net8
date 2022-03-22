@@ -4,6 +4,8 @@
 @inject NavigationManager navManager
 @inject IMapper mapper
 
+@attribute [Authorize(Roles = UserRoles.Administrator)]
+
 <h4>Update Author</h4>
 
 @if (Author != null)

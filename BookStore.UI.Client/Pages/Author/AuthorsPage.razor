@@ -38,12 +38,14 @@
                 <a class="btn btn-primary" href="/author/view/@author.Id">
                     <span class="oi oi-eye me-2"></span> View
                 </a>
-                <a class="btn btn-warning" href="/author/update/@author.Id">
-                    <span class="oi oi-pencil me-2"></span> Update
-                </a>
-                <button class="btn btn-danger" @onclick="(() => OnDeleteAuthor(author.Id))">
-                    <span class="oi oi-trash me-2"></span> Delete
-                </button>
+                <AuthorizeView Roles="@UserRoles.Administrator">
+                    <a class="btn btn-warning" href="/author/update/@author.Id">
+                        <span class="oi oi-pencil me-2"></span> Update
+                    </a>
+                    <button class="btn btn-danger" @onclick="(() => OnDeleteAuthor(author.Id))">
+                        <span class="oi oi-trash me-2"></span> Delete
+                    </button>
+                </AuthorizeView>
             </td>
         </TableBody>
     </VirtualizedComp>

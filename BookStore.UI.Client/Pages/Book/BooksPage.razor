@@ -19,7 +19,7 @@
     @if (responseDelete.Success == false)
     {
         <div class="alert alert-danger">@responseDelete.ValidationErrors</div>
-    }  
+    }
 
     <VirtualizedComp Context="book" Items="Books" OnScroll="LoadBooks" TotalSize="TotalSize">
         <TableHeader>
@@ -29,7 +29,6 @@
             <th>Author Name</th>
             <th>Actions</th>
         </TableHeader>
-
 
         <TableBody>
             <td>
@@ -44,12 +43,14 @@
                 <a class="btn btn-primary" href="/book/view/@book.Id">
                     <span class="oi oi-eye"></span> View
                 </a>
-                <a class="btn btn-warning" href="/book/view/@book.Id">
-                    <span class="oi oi-trash"></span> Update
-                </a>
-                <button class="btn btn-danger" @onclick="(() => OnDeleteBook(book.Id))">
-                    <span class="oi oi-trash"></span> Delete
-                </button>
+                <AuthorizeView Roles="@UserRoles.Administrator">
+                    <a class="btn btn-warning" href="/book/update/@book.Id">
+                        <span class="oi oi-trash"></span> Update
+                    </a>
+                    <button class="btn btn-danger" @onclick="(() => OnDeleteBook(book.Id))">
+                        <span class="oi oi-trash"></span> Delete
+                    </button>
+                </AuthorizeView>
             </td>
         </TableBody>
     </VirtualizedComp>

@@ -75,9 +75,9 @@ public class BookService : BaseHttpClient, IBookService
         return response;
     }
 
-    public async Task<Response<BookUpdateDto>> UpdateBook(int id, BookUpdateDto book)
+    public async Task<Response<int>> UpdateBook(int id, BookUpdateDto book)
     {
-        Response<BookUpdateDto> response;
+        Response<int> response;
         try
         {
             await GetJwt();
@@ -86,7 +86,7 @@ public class BookService : BaseHttpClient, IBookService
         }
         catch (ApiException ex)
         {
-            response = ConvertApiException<BookUpdateDto>(ex);
+            response = ConvertApiException<int>(ex);
         }
         return response;
     }
