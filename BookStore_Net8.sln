@@ -5,11 +5,6 @@ VisualStudioVersion = 17.2.32210.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.API", "BookStore.API\BookStore.API.csproj", "{9D66C690-8FCE-4603-8B9B-4D224C6B14CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{44765ED3-427B-4378-A92B-A5B7E54268CD}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookStore.UI.Client", "BookStore.UI.Client\BookStore.UI.Client.csproj", "{1E74059A-1C34-401E-8C87-81EA4117E28A}"
 EndProject
 Global
